@@ -1,0 +1,259 @@
+/* base */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  /* no system-ui / -apple-system */
+  color: #0d1b24;
+  background: #f7f8fa;
+  line-height: 1.5;
+}
+
+main {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+}
+
+header p {
+  margin: 0 0 20px;
+  color: #4f5b67;
+}
+
+/* cards */
+section {
+  background: #ffffff;
+  border: 1px solid #e6edf3;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .04);
+}
+
+section h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+section h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+/* calculator */
+.input-area {
+  display: grid;
+  grid-template-columns: 150px 1fr auto;
+  /* label | input | button */
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.input-area label {
+  color: #2e3a44;
+  font-size: 14px;
+}
+
+.input-area input {
+  padding: 10px 12px;
+  border: 1px solid #cfd9e2;
+  border-radius: 8px;
+  outline: none;
+  background: #fbfdff;
+  color: #0d1b24;
+}
+
+.input-area input:focus {
+  border-color: #12b39a;
+  /* cyan accent */
+  box-shadow: 0 0 0 3px rgba(18, 179, 154, .15);
+}
+
+.input-area button {
+  padding: 9px 14px;
+  /* not big */
+  border: 1px solid #12b39a;
+  border-radius: 8px;
+  background: #12b39a;
+  color: #07211c;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.input-area button:hover {
+  filter: brightness(1.04);
+}
+
+.input-area button:active {
+  filter: brightness(0.98);
+}
+
+#output {
+  margin: 8px 0 6px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f2f6fa;
+  color: #0d1b24;
+  border: 1px solid #e6edf3;
+  overflow-x: auto;
+}
+
+#moneyKept {
+  margin: 0 0 10px;
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eafff9;
+  color: #0b6e5e;
+  border: 1px solid #b6f2e6;
+}
+
+/* breakdown block */
+#breakdown .row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px dashed #e6edf3;
+}
+
+#breakdown .row:last-child {
+  border-bottom: 0;
+}
+
+.table-wrap {
+  margin-top: 10px;
+  overflow-x: auto;
+}
+
+#bracketTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#bracketTable th,
+#bracketTable td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid #eef3f7;
+}
+
+#bracketTable thead th {
+  font-size: 13px;
+  color: #4f5b67;
+}
+
+#bracketTable tbody td {
+  font-size: 13px;
+  color: #1d2a32;
+}
+
+/* subtle accent colors for totals */
+#totalTaxValue,
+#marginalDollarValue,
+#effectiveDollarValue {
+  color: #cf6a14;
+}
+
+#moneyKeptValue {
+  color: #0b6e5e;
+}
+
+/* chart (bigger; fixed) */
+#graph {
+  padding-bottom: 10px;
+}
+
+#taxChart {
+  display: block;
+  width: 100%;
+  height: 360px;
+}
+
+/* matches canvas height */
+
+/* responsive */
+@media (max-width: 560px) {
+  .input-area {
+    grid-template-columns: 1fr auto;
+  }
+
+  .input-area label {
+    display: none;
+  }
+}
+
+details {
+  margin-top: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+summary {
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  outline: none;
+  position: relative;
+  padding-right: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+summary:hover {
+  color: #0a7b83;
+  /* soft teal tone */
+}
+
+/* arrow indicator */
+summary::after {
+  content: "▸";
+  position: absolute;
+  right: 0.5rem;
+  top: 0;
+  font-size: 1rem;
+  transform: rotate(0deg);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+  color: #666;
+}
+
+/* rotate arrow when open */
+details[open] summary::after {
+  transform: rotate(90deg);
+  color: #0a7b83;
+}
+
+/* spacing for open details content */
+details[open] summary {
+  margin-bottom: 0.75rem;
+}
+
+details p,
+details ul,
+details ol {
+  margin: 0.75rem 0;
+  line-height: 1.6;
+}
+
+details .footnote {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 1rem;
+}

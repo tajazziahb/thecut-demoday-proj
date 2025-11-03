@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Cut | Tax Visualizer</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+  <main>
+    <header>
+      <h1>The Cut</h1>
+      <p>Enter your income to see how each bracket is taxed.</p>
+    </header>
+
+    <section id="calculator">
+      <h2>Income Tax Calculator</h2>
+
+      <div class="input-area">
+        <label for="userIncome">Annual Income</label>
+        <input id="userIncome" type="number" min="0" step="500" placeholder="e.g., 75,000" />
+        <button type="button">Calculate</button>
+      </div>
+
+      <pre id="output">Enter an income and press Calculate.</pre>
+      <p id="moneyKept">Money Kept: —</p>
+
+      <section id="breakdown" hidden>
+        <h3>Breakdown</h3>
+
+        <div id="totals">
+          <div class="row"><span>Standard Deduction</span><span id="sdValue">—</span></div>
+          <div class="row"><span>Taxable Income</span><span id="taxableValue">—</span></div>
+          <div class="row"><span>Total Tax Owed</span><span id="totalTaxValue">—</span></div>
+          <div class="row"><span>Effective Rate</span><span id="effectiveRateValue">—</span></div>
+          <div class="row"><span>Effective (Dollars)</span><span id="effectiveDollarValue">—</span></div>
+          <div class="row"><span>Marginal Rate</span><span id="marginalRateValue">—</span></div>
+          <div class="row"><span>Marginal (Dollars)</span><span id="marginalDollarValue">—</span></div>
+          <div class="row"><span>Money Kept</span><span id="moneyKeptValue">—</span></div>
+        </div>
+
+        <div class="table-wrap">
+          <table id="bracketTable" aria-label="Per bracket breakdown">
+            <thead>
+              <tr>
+                <th>Bracket</th>
+                <th>Amount Taxed at Rate</th>
+                <th>Tax Paid</th>
+                <th>% of Total Income</th>
+              </tr>
+            </thead>
+            <tbody id="bracketBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section id="graph">
+      <h2>Bracket Visualization (Live)</h2>
+
+      <canvas id="taxChart" width="800" height="400"></canvas>
+    </section>
+
+    <details id="knowledge">
+      <summary>What am I looking at?</summary>
+
+      <p>This tool shows how the U.S. progressive tax system divides income into brackets and taxes each slice
+        separately.
+        You never pay one flat rate on your entire income.</p>
+
+      <h3>Key terms</h3>
+      <ul>
+        <li>Standard Deduction — amount subtracted from your gross income before taxes are calculated.</li>
+        <li>Taxable Income — income after the standard deduction is applied.</li>
+        <li>Total Tax Owed — combined tax from all brackets.</li>
+        <li>Effective Rate — your total tax divided by your income; represents your average tax rate.</li>
+        <li>Marginal Rate — the rate applied to your next dollar earned.</li>
+        <li>Money Kept — the amount you actually take home after federal taxes.</li>
+      </ul>
+
+      <h3>How to read it</h3>
+      <ol>
+        <li>Enter your annual income and press Calculate.</li>
+        <li>Review your deduction, taxable income, total tax, and money kept.</li>
+        <li>Only the portion of income within each bracket is taxed at that bracket’s rate.</li>
+      </ol>
+
+      <p class="footnote">Simplified for demonstration purposes. Does not include state or payroll taxes, credits, or
+        adjustments.</p>
+    </details>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="/js/main.js" defer></script>
+</body>
+
+</html>
