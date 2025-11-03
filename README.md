@@ -4,7 +4,7 @@
 The Cut is a full-stack web app that reveals what really happens to your income — showing where your money gets sliced, how much is kept, and how tax brackets actually work.  
 It turns complex tax math into a visual story, making financial literacy more approachable and interactive for everyone.
 
-[Link to project]()
+[Link to project](https://thecut-demoday-proj-production.up.railway.app/)
 
 ![screenshot](img/thecut.png)
 
