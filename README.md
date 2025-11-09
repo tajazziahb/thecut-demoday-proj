@@ -1,51 +1,64 @@
 # The Cut
 
-## Overview
-The Cut is a full-stack web app that reveals what really happens to your income — showing where your money gets sliced, how much is kept, and how tax brackets actually work.  
-It turns complex tax math into a visual story, making financial literacy more approachable and interactive for everyone.
+**Built to show what’s really happening before your paycheck hits your pocket.**
 
-[Link to project](https://thecut-demoday-proj-production.up.railway.app/)
+## Overview
+The Cut is a web app that shows what really happens to your income — how it’s taxed, how much you keep, and how each tax bracket actually works.  
+It’s meant to make the numbers make sense by turning complex tax math into something visual, interactive, and easy to understand.
+
+This version covers **Single Filers for the 2024 tax year**. Other filing statuses like Married or Head of Household will come later as the project expands.
+
+[View Project](https://thecut-demoday-proj-production.up.railway.app/)
 
 ![screenshot](img/thecut.png)
 
 ### Problem & Goal
-Most people know what they earn, but not what they actually keep — or how each tax bracket shapes that outcome.  
-The goal of The Cut is to make financial clarity visual, intuitive, and empowering through design and storytelling.
+Most people can tell you what they make but not what they truly keep — or how much of it goes where.  
+The goal of The Cut is to make that clear. It’s a visual tool for financial literacy, designed to help people actually see how the federal tax system slices up income and where their money lands.
 
-## How It's Made
-Built using:
-- **Node.js** for the backend starter API (`http`, `fs`, `url`, `querystring`)
+---
+
+## How It’s Made
+Built with:
+- **Node.js** for the backend (`http`, `fs`, `url`, `querystring`)
 - **JavaScript**, **HTML**, and **CSS** for the frontend
-- **Chart.js** for live, vertical bar graphs that visualize each income range  
+- **Chart.js** for live stacked bar visuals  
 
-All files are hand-coded for readability, following clear naming conventions and no unnecessary complexity.  
-No frameworks were used — just clean logic, data visualization, and functional design.
+Everything is hand-coded for simplicity and structure. No frameworks — just clean logic, readable files, and direct control over how the math connects to the visuals.
+
+---
 
 ## How It Works
-1. The user inputs their annual income and clicks **Calculate**.  
-2. The backend computes:
+1. The user enters their annual income or adjusts the **slider**.  
+2. The backend calculates:
    - Standard deduction  
    - Taxable income  
    - Total tax owed  
    - Effective and marginal tax rates  
 3. The frontend:
-   - Displays a breakdown of how each bracket applies  
-   - Shows the user’s **Money Kept** amount  
-   - Renders a stacked bar graph illustrating the taxed and take-home portions  
-
-## Optimizations
-- Adjusted scaling for smoother Chart.js visuals and responsive layout  
-- Simplified backend math for clarity and performance  
-- Replaced jargon with human-readable terms for accessibility  
-- Descriptive variable names (no single-letter variables) for better clarity  
-- Clean separation between logic, structure, and style  
-
-## Lessons Learned
-- Progressive tax math requires both accuracy and clarity to explain well  
-- Visual context drastically improves understanding of financial data  
-- Chart.js becomes intuitive when you focus on structure over styling  
-- Clear naming and concise code save hours of debugging later  
+   - Updates the breakdown instantly  
+   - Shows what’s taxed and what’s kept  
+   - Renders a glowing stacked bar chart that reacts to each change  
+   - Displays tooltips that explain what each bracket means in plain language  
 
 ---
 
-**Built to show what really happens before your paycheck hits your pocket.**
+## Optimizations
+- Tightened Chart.js layout to stop graph clipping on smaller screens  
+- Locked horizontal scroll and fixed width overflow issues  
+- Added smooth scaling for both the graph and breakdown table  
+- Refined tooltips to make the hover info more conversational and useful  
+- Simplified math and cleaned naming for clarity  
+- Smoothed out layout so it feels balanced across devices  
+
+---
+
+## Lessons Learned
+- Real clarity comes from visuals, not just explanations  
+- People understand money better when they can *see* where it goes  
+- Keeping the codebase light makes every adjustment faster  
+- Designing for both accuracy and readability matters just as much as the math  
+
+---
+
+**Built to show what’s really happening before your paycheck hits your pocket.**
