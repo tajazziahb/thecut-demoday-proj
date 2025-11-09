@@ -1,8 +1,22 @@
 // initialize DOM elements
-const calculateButton = document.querySelector('button');
+const calculateButton = document.querySelector('#calcBtn'); // scope to the calculate button
 const incomeInputField = document.querySelector('#userIncome');
-const summaryBox = document.querySelector('#output');
-const moneyKeptLine = document.querySelector('#moneyKept');
+const summaryBox = document.querySelector('#output'); // optional legacy box
+const moneyKeptLine = document.querySelector('#moneyKept'); // optional legacy line
+
+// summary pills
+const incomeSlider = document.querySelector('#incomeSlider');
+const dollarsKeptEl = document.querySelector('#dollarsKept');
+const percentKeptEl = document.querySelector('#percentKept');
+const taxDollarsPaidEl = document.querySelector('#taxDollarsPaid');
+const effRateEl = document.querySelector('#effRate');
+const marginalRateEl = document.querySelector('#marginalRate');
+
+// toggle target 
+const toggleBreakdownBtn = document.querySelector('#toggleBreakdown');
+const breakdownBlock =
+  document.querySelector('#workbench #breakdown') ||
+  document.querySelector('#calculator #breakdown');
 
 // chart instance
 let taxChartInstance = null;
@@ -19,7 +33,6 @@ function toMoney(amount) {
 function toPercentText(fraction) {
   return (Number(fraction || 0) * 100).toFixed(1) + '%';
 }
-
 
 function fillTotals(payload) { // payload from server to fill totals section cite: from ChatGPT
   document.querySelector('#sdValue').textContent = toMoney(payload.standardDeduction); // output standard deduction total
@@ -64,7 +77,7 @@ function fillBracketTable(bracketDetails, taxableIncomeAmount) { // populate tax
 }
 
 function revealBreakdown() {
-  const section = document.querySelector('#breakdown'); 
+  const section = breakdownBlock;
   if (section) section.hidden = false; // reveal breakdown section
 }
 
@@ -74,16 +87,30 @@ function showSummary(payload) {
   const effectiveDollars = Number(payload.income) * Number(payload.effectiveTaxRate); // calculate effective dollars
   const marginalDollars = Number(payload.income) * Number(payload.marginalTaxRate); // calculate marginal dollars
 
-  summaryBox.textContent =
-    `Year: ${payload.taxYear}\n` + // year of tax calculation
-    `Filing Status: ${payload.filingStatus}\n` + // filing status
-    `Standard Deduction: ${toMoney(payload.standardDeduction)}\n` + // standard deduction amount
-    `Taxable Income: ${toMoney(payload.taxableIncome)}\n` + // taxable income amount
-    `Total Tax Owed: ${toMoney(payload.totalTaxOwed)}\n` + // total tax owed amount
-    `Effective Rate: ${toPercentText(payload.effectiveTaxRate)} (${toMoney(effectiveDollars)})\n` + // effective rate and dollars
-    `Marginal Rate: ${toPercentText(payload.marginalTaxRate)} (${toMoney(marginalDollars)})`; // marginal rate and dollars
+  if (summaryBox) {
+    summaryBox.textContent =
+      `Year: ${payload.taxYear}\n` + // year of tax calculation
+      `Filing Status: ${payload.filingStatus}\n` + // filing status
+      `Standard Deduction: ${toMoney(payload.standardDeduction)}\n` + // standard deduction amount
+      `Taxable Income: ${toMoney(payload.taxableIncome)}\n` + // taxable income amount
+      `Total Tax Owed: ${toMoney(payload.totalTaxOwed)}\n` + // total tax owed amount
+      `Effective Rate: ${toPercentText(payload.effectiveTaxRate)} (${toMoney(effectiveDollars)})\n` + // effective rate and dollars
+      `Marginal Rate: ${toPercentText(payload.marginalTaxRate)} (${toMoney(marginalDollars)})`; // marginal rate and dollars
+  }
 
-  moneyKeptLine.textContent = `Money Kept: ${toMoney(moneyKept)}`; // output money kept line
+  if (moneyKeptLine) {
+    moneyKeptLine.textContent = `Money Kept: ${toMoney(moneyKept)}`; // output money kept line
+  }
+
+  // summary pills
+  if (dollarsKeptEl) dollarsKeptEl.textContent = toMoney(moneyKept);
+  if (percentKeptEl) {
+    const pct = Number(payload.income) > 0 ? (moneyKept / Number(payload.income)) : 0;
+    percentKeptEl.textContent = `(${toPercentText(pct)})`;
+  }
+  if (taxDollarsPaidEl) taxDollarsPaidEl.textContent = toMoney(payload.totalTaxOwed);
+  if (effRateEl) effRateEl.textContent = `(${toPercentText(payload.effectiveTaxRate)})`;
+  if (marginalRateEl) marginalRateEl.textContent = toPercentText(payload.marginalTaxRate);
 }
 
 // Chart.js Visualization (functional options only; no styling here)
@@ -101,49 +128,85 @@ function renderTaxChart(bracketDetailList, taxableIncomeAmount) { // render tax 
   const takeHomeData = incomeSliceData.map((sliceAmount, index) => Math.max(0, sliceAmount - taxPaidData[index])); // take-home income in each bracket
 
   if (typeof Chart === 'undefined') return; // ensure Chart.js is loaded
-  const chartContext = document.getElementById('taxChart').getContext('2d'); 
+  const ctx = document.getElementById('taxChart').getContext('2d');
 
-  // ensure tall stacks fit; add headroom and avoid edge cutoff
-  const tallestStackValue = Math.max(...incomeSliceData); // find tallest stack cite: from Google
-  const yAxisSuggestedMax = tallestStackValue * 1.6;  // add 60% headroom
+  // neon colors
+  const colors = {
+    tax: '#FF9B8B',
+    net: '#69F5C3',
+    ticks: 'rgba(234,243,255,0.85)',
+    grid: 'rgba(234,243,255,0.12)',
+    border: 'rgba(234,243,255,0.25)'
+  };
+
+  const yAxisSuggestedMax = Math.max(1, taxableIncomeAmount) * 1.15;
 
   const chartData = { // data structure for Chart.js
     labels: bracketLabels,  // x-axis labels
     datasets: [
-      { label: 'Tax Paid', data: taxPaidData, stack: 'slice' }, // tax paid dataset
-      { label: 'Take-Home Income', data: takeHomeData, stack: 'slice' } // take-home income dataset
+      { label: 'Tax Paid', data: taxPaidData, stack: 'slice', backgroundColor: colors.tax, borderColor: colors.border, borderWidth: 1, borderRadius: 6 }, // tax paid dataset
+      { label: 'Take-Home Income', data: takeHomeData, stack: 'slice', backgroundColor: colors.net, borderColor: colors.border, borderWidth: 1, borderRadius: 6 } // take-home income dataset
     ]
   };
 
   const chartOptions = { // configuration options for Chart.js
-    responsive: false,  // fixed size for clarity
+    responsive: true,  // fixed size for clarity
+    maintainAspectRatio: true, 
+    aspectRation: 16 / 9, // widescreen aspect ratio
     devicePixelRatio: 1, // standard pixel ratio
-    animation: { duration: 200 }, // brief animation on update
+    animation: { // brief animation on update
+      duration: 700,
+      easing: 'easeInOutSine',
+      delay: (c) => c.dataIndex * 60
+    },
     elements: { bar: { borderSkipped: false, minBarLength: 6 } }, // bar styling
     plugins: {
-      legend: { position: 'bottom' }, // legend position
-      tooltip: { callbacks: { label: (context) => `${context.dataset.label}: ${toMoney(context.parsed.y)}` } } // tooltip formatting
+      legend: { position: 'bottom', labels: { color: colors.ticks } }, // legend position
+     
+      tooltip: {
+        backgroundColor: 'rgba(20,25,35,0.95)',
+        titleColor: '#d4f5ff',
+        bodyColor: '#f0faff',
+        borderColor: 'rgba(0,255,204,0.4)',
+        borderWidth: 1,
+        padding: 12,
+        displayColors: true,
+        callbacks: {
+          title: (items) => `${items[0].label} bracket`,
+          label: (ctx) => {
+            const value = toMoney(ctx.parsed.y);
+            const label = ctx.dataset.label || '';
+            if (label.includes('Tax Paid')) return `Taxed portion: ${value}`;
+            if (label.includes('Take-Home')) return `You keep around ${value} at this layer`;
+            return `${label}: ${value}`;
+          },
+          footer: () => 'Only this slice is taxed at this rate.'
+        }
+      }
     },
     scales: { // axis configuration
       x: {
         stacked: true,
         offset: true,                 // centers first/last bar so it doesn't clip the edges
-        categoryPercentage: 0.45,     // slimmer group width
-        barPercentage: 0.7            // slimmer bars inside group
+        categoryPercentage: 0.5,      // slimmer group width
+        barPercentage: 0.75,          // slimmer bars inside group
+        ticks: { color: colors.ticks },
+        grid: { color: colors.grid, borderColor: colors.border }
       },
       y: {
         stacked: true, // stack bars vertically
         beginAtZero: true, // y-axis starts at zero
         suggestedMax: yAxisSuggestedMax, // headroom so bars + grid lines stay inside
         grace: '10%', // extra space above tallest bar
-        ticks: { callback: (value) => toMoney(value) } // y-axis tick formatting
+        ticks: { color: colors.ticks, callback: (value) => toMoney(value) }, // y-axis tick formatting
+        grid: { color: colors.grid, borderColor: colors.border }
       }
     },
     normalized: true // ensure stacking normalizes values properly
   };
 
   if (!taxChartInstance) { // create new chart if none exists
-    taxChartInstance = new Chart(chartContext, { type: 'bar', data: chartData, options: chartOptions }); // bar chart type
+    taxChartInstance = new Chart(ctx, { type: 'bar', data: chartData, options: chartOptions }); // bar chart type
   } else {
     taxChartInstance.data = chartData; // update existing chart data
     taxChartInstance.options = chartOptions; // update existing chart options
@@ -151,25 +214,53 @@ function renderTaxChart(bracketDetailList, taxableIncomeAmount) { // render tax 
   }
 }
 
-calculateButton.addEventListener('click', handleCalculate); 
+calculateButton.addEventListener('click', handleCalculate);
 incomeInputField.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') handleCalculate();
 });
+
+// keep input and slider in sync
+if (incomeSlider) {
+  incomeSlider.addEventListener('input', () => {
+    incomeInputField.value = incomeSlider.value;
+    handleCalculate();
+  });
+  // if user types instead, move the slider
+  incomeInputField.addEventListener('input', () => {
+    const v = Number(incomeInputField.value || 0);
+    if (!Number.isNaN(v)) incomeSlider.value = String(v);
+  });
+}
+
+// Toggle breakdown (no aria)
+if (toggleBreakdownBtn && breakdownBlock) {
+  toggleBreakdownBtn.addEventListener('click', () => {
+    const isVisible = breakdownBlock.hidden === false;
+    breakdownBlock.hidden = isVisible; // hide if visible, show if hidden
+    toggleBreakdownBtn.textContent = isVisible ? 'Show full breakdown' : 'Hide full breakdown';
+  });
+}
 
 function handleCalculate() {
   const incomeValue = incomeInputField.value.trim();
 
   if (incomeValue === '') {
-    summaryBox.style.display = '';
-    summaryBox.textContent = 'Please enter your income amount';
-    moneyKeptLine.textContent = 'Money Kept: —';
-    const breakdownBlock = document.querySelector('#breakdown');
+    if (summaryBox) {
+      summaryBox.style.display = '';
+      summaryBox.textContent = 'Please enter your income amount';
+    }
+    if (moneyKeptLine) moneyKeptLine.textContent = 'Money Kept: —';
     if (breakdownBlock) breakdownBlock.hidden = true;
     if (taxChartInstance) { taxChartInstance.destroy(); taxChartInstance = null; } // clear chart if no income
+    if (dollarsKeptEl) dollarsKeptEl.textContent = '—';
+    if (percentKeptEl) percentKeptEl.textContent = '—';
+    if (taxDollarsPaidEl) taxDollarsPaidEl.textContent = '—';
+    if (effRateEl) effRateEl.textContent = '—';
+    if (marginalRateEl) marginalRateEl.textContent = '—';
     return;
   }
 
-  summaryBox.textContent = '';
+  if (summaryBox) summaryBox.textContent = '';
 
   fetch(`/api?income=${incomeValue}`)
     .then((response) => response.json())
@@ -177,19 +268,30 @@ function handleCalculate() {
       if (data.error) throw new Error(data.error);
 
       showSummary(data); // display summary
-      summaryBox.style.display = 'none'; // remove redundancy
+      if (summaryBox) summaryBox.style.display = 'none'; // remove redundancy
 
       fillTotals(data); // fill totals section
       fillBracketTable(data.bracketDetails, Number(data.taxableIncome || 0));   // fill breakdown table
       revealBreakdown();
       renderTaxChart(data.bracketDetails, Number(data.taxableIncome || 0)); // render tax chart
+
+      if (breakdownBlock && toggleBreakdownBtn) {
+        breakdownBlock.hidden = false;
+        toggleBreakdownBtn.textContent = 'Hide full breakdown';
+      }
     })
     .catch(() => {
-      summaryBox.style.display = '';
-      summaryBox.textContent = 'Something went wrong. Try again.';
-      moneyKeptLine.textContent = 'Money Kept: —';
-      const breakdownBlock = document.querySelector('#breakdown');
+      if (summaryBox) {
+        summaryBox.style.display = '';
+        summaryBox.textContent = 'Something went wrong. Try again.';
+      }
+      if (moneyKeptLine) moneyKeptLine.textContent = 'Money Kept: —';
       if (breakdownBlock) breakdownBlock.hidden = true;
       if (taxChartInstance) { taxChartInstance.destroy(); taxChartInstance = null; } // clear chart on error
+      if (dollarsKeptEl) dollarsKeptEl.textContent = '—';
+      if (percentKeptEl) percentKeptEl.textContent = '—';
+      if (taxDollarsPaidEl) taxDollarsPaidEl.textContent = '—';
+      if (effRateEl) effRateEl.textContent = '—';
+      if (marginalRateEl) marginalRateEl.textContent = '—';
     });
 }

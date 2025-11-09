@@ -10,109 +10,185 @@ body {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  color: #0d1b24;
-  background: #f7f8fa;
+  color: #eaf3ff;
+  background: #070c14;
   line-height: 1.5;
 }
 
 main {
-  max-width: 940px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 20px;
 }
 
 header h1 {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   font-size: 28px;
+  color: #69f5c3;
+  text-shadow: 0 0 10px rgba(105, 245, 195, .35);
 }
 
 header p {
-  margin: 0 0 20px;
-  color: #4f5b67;
+  margin: 0 0 16px;
+  color: rgba(234, 243, 255, .72);
 }
 
 section {
-  background: #ffffff;
-  border: 1px solid #e6edf3;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 18px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, .04);
+  background: #0f1627;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .55);
 }
 
 section h2 {
   margin: 0 0 12px;
   font-size: 18px;
+  color: #eaf3ff;
 }
 
 section h3 {
   margin: 0 0 10px;
   font-size: 16px;
+  color: #eaf3ff;
+}
+
+#calculator {
+  padding-bottom: 12px;
 }
 
 .input-area {
   display: grid;
-  grid-template-columns: 150px 1fr auto;
+  grid-template-columns: 140px minmax(160px, 260px) auto auto;
   gap: 10px;
   align-items: center;
-  margin-bottom: 12px;
 }
 
 .input-area label {
-  color: #2e3a44;
   font-size: 14px;
+  color: rgba(234, 243, 255, .85);
 }
 
-.input-area input {
+.input-area input[type="number"] {
   padding: 10px 12px;
-  border: 1px solid #cfd9e2;
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 10px;
+  background: #0f1627;
+  color: #eaf3ff;
   outline: none;
-  background: #fbfdff;
-  color: #0d1b24;
 }
 
-.input-area input:focus {
-  border-color: #12b39a;
-  box-shadow: 0 0 0 3px rgba(18, 179, 154, .15);
+.input-area input[type="number"]::placeholder {
+  color: rgba(234, 243, 255, .5);
 }
 
-.input-area button {
-  padding: 9px 14px;
-  border: 1px solid #12b39a;
-  border-radius: 8px;
-  background: #12b39a;
-  color: #07211c;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.input-area button:hover {
-  filter: brightness(1.04);
-}
-
-.input-area button:active {
-  filter: brightness(0.98);
-}
-
-#output {
-  margin: 8px 0 6px;
-  padding: 10px;
-  border-radius: 8px;
-  background: #f2f6fa;
-  color: #0d1b24;
-  border: 1px solid #e6edf3;
-  overflow-x: auto;
-}
-
-#moneyKept {
-  margin: 0 0 10px;
-  display: inline-block;
-  padding: 6px 10px;
+#incomeSlider {
+  width: 320px;
+  max-width: 36vw;
+  height: 10px;
   border-radius: 999px;
-  background: #eafff9;
-  color: #0b6e5e;
-  border: 1px solid #b6f2e6;
+  background: linear-gradient(90deg, #69f5c3, #ffd68a, #ff9b8b);
+  border: 1px solid rgba(255, 255, 255, .1);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, .25), 0 0 14px rgba(104, 255, 204, .18);
+}
+
+#incomeSlider::-webkit-slider-thumb,
+#incomeSlider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #eaf3ff;
+  border: 2px solid #69f5c3;
+  box-shadow: 0 0 10px rgba(105, 245, 195, .7);
+}
+
+#calcBtn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 0;
+  background: linear-gradient(90deg, #69f5c3, #ff9b8b);
+  color: #0b0f19;
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(255, 155, 139, .28);
+  cursor: pointer;
+  transition: .25s;
+}
+
+#calcBtn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 20px rgba(255, 155, 139, .6);
+}
+
+#sliderHint {
+  color: rgba(234, 243, 255, .7);
+}
+
+#summaryStrip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 10px;
+  max-width: 920px;
+  margin: 12px auto 0;
+}
+
+.summary-pill {
+  background: #101a2e;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 0 18px rgba(105, 245, 195, .05);
+  display: grid;
+  gap: 2px;
+}
+
+.summary-pill .label {
+  font-size: 12px;
+  color: rgba(234, 243, 255, .65);
+}
+
+.summary-pill .value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #69f5c3;
+  text-shadow: 0 0 10px rgba(105, 245, 195, .4);
+}
+
+.summary-pill .subvalue {
+  font-size: 13px;
+  color: rgba(255, 214, 138, .88);
+}
+
+#taxDollarsPaid,
+#effRate {
+  color: #ff9b8b;
+}
+
+#marginalRate {
+  color: #ffd68a;
+}
+
+#toggleBreakdown {
+  background: linear-gradient(90deg, #69f5c3, #ffd68a);
+  color: #0b0f19;
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(255, 214, 138, .3);
+  cursor: pointer;
+}
+
+#workbench {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+#breakdown {
+  padding-bottom: 10px;
 }
 
 #breakdown .row {
@@ -120,7 +196,7 @@ section h3 {
   grid-template-columns: 1fr auto;
   gap: 10px;
   padding: 6px 0;
-  border-bottom: 1px dashed #e6edf3;
+  border-bottom: 1px dashed rgba(255, 255, 255, .08);
 }
 
 #breakdown .row:last-child {
@@ -141,102 +217,254 @@ section h3 {
 #bracketTable td {
   text-align: left;
   padding: 8px 10px;
-  border-bottom: 1px solid #eef3f7;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
 }
 
 #bracketTable thead th {
   font-size: 13px;
-  color: #4f5b67;
+  color: rgba(234, 243, 255, .78);
 }
 
 #bracketTable tbody td {
   font-size: 13px;
-  color: #1d2a32;
+  color: #eaf3ff;
 }
 
 #totalTaxValue,
 #marginalDollarValue,
 #effectiveDollarValue {
-  color: #cf6a14;
+  color: #ffb2a3;
 }
 
 #moneyKeptValue {
-  color: #0b6e5e;
+  color: #69f5c3;
 }
+
 
 #graph {
   padding-bottom: 10px;
 }
 
+.graph-stage {
+  position: relative;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(0, 0, 0, .22));
+  box-shadow: 0 0 24px rgba(105, 245, 195, .08), 0 0 40px rgba(255, 155, 139, .08);
+  overflow: hidden;
+}
+
 #taxChart {
   display: block;
   width: 100%;
-  height: 360px;
+  height: auto;
 }
 
-@media (max-width: 560px) {
-  .input-area {
-    grid-template-columns: 1fr auto;
+
+@keyframes slosh {
+  0% {
+    transform: translateX(-6%) translateY(0);
+    opacity: .7;
   }
 
-  .input-area label {
-    display: none;
+  50% {
+    transform: translateX(6%) translateY(2%);
+    opacity: .9;
   }
+
+  100% {
+    transform: translateX(-6%) translateY(0);
+    opacity: .7;
+  }
+}
+
+#graph .caption {
+  color: rgba(234, 243, 255, .72);
+}
+
+#takeaway {
+  box-shadow: 0 10px 18px rgba(8, 12, 24, .35);
 }
 
 details {
-  margin-top: 2rem;
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 1rem 1.25rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  background: #0f1627;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
 }
 
 summary {
-  font-weight: 600;
   cursor: pointer;
-  list-style: none;
-  outline: none;
-  position: relative;
-  padding-right: 1.5rem;
-  transition: color 0.3s ease;
-}
-
-summary:hover {
-  color: #0a7b83;
-}
-
-summary::after {
-  content: "▸";
-  position: absolute;
-  right: 0.5rem;
-  top: 0;
-  font-size: 1rem;
-  transform: rotate(0deg);
-  transform-origin: center;
-  transition: transform 0.3s ease;
-  color: #666;
-}
-
-details[open] summary::after {
-  transform: rotate(90deg);
-  color: #0a7b83;
-}
-
-details[open] summary {
-  margin-bottom: 0.75rem;
+  font-weight: 600;
 }
 
 details p,
 details ul,
 details ol {
-  margin: 0.75rem 0;
-  line-height: 1.6;
+  margin: .75rem 0;
 }
 
 details .footnote {
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 1rem;
+  font-size: .9rem;
+  color: #9fb2c9;
+}
+
+@media (max-width: 980px) {
+  #workbench {
+    grid-template-columns: 1fr;
+  }
+
+  #incomeSlider {
+    max-width: 60vw;
+  }
+
+  #summaryStrip {
+    max-width: 100%;
+  }
+}
+
+.disclaimer {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(234, 243, 255, .7);
+  text-align: left;
+}
+
+.disclaimer strong {
+  color: #ffd68a;
+  font-weight: 600;
+}
+
+.graph-stage {
+  aspect-ratio: 16 / 9;
+}
+
+#taxChart {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 1100px) {
+  main {
+    padding: 16px;
+  }
+
+  #workbench {
+    gap: 12px;
+  }
+
+  #summaryStrip {
+    max-width: 100%;
+  }
+
+  .summary-pill .value {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 980px) {
+
+  #workbench {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  #graph {
+    order: 1;
+  }
+
+  #breakdown {
+    order: 2;
+  }
+
+  section {
+    padding: 12px;
+  }
+
+  #summaryStrip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
+@media (max-width: 720px) {
+
+  .input-area {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .input-area label {
+    display: none;
+  }
+
+  #incomeSlider {
+    width: 100%;
+    max-width: none;
+    height: 10px;
+  }
+
+  #calcBtn {
+    width: 100%;
+  }
+
+  #summaryStrip {
+    grid-template-columns: 1fr;
+  }
+
+  #bracketTable thead th {
+    font-size: 12px;
+  }
+
+  #bracketTable tbody td {
+    font-size: 12px;
+  }
+
+  .table-wrap {
+    margin-top: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #bracketTable {
+    min-width: 520px;
+  }
+
+}
+
+@media (max-width: 560px) {
+  header h1 {
+    font-size: 24px;
+  }
+
+  section h2 {
+    font-size: 16px;
+  }
+
+  section h3 {
+    font-size: 15px;
+  }
+
+  section {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .45);
+  }
+
+  details {
+    padding: 10px 12px;
+  }
+
+  #takeaway {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 720px) {
+  #bracketTable thead th {
+    position: sticky;
+    top: 0;
+    background: #0f1627;
+    z-index: 1;
+  }
 }
